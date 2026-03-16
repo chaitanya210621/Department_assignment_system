@@ -7,6 +7,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Set Axios base URL once
+  axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const stored = localStorage.getItem('user');
     if (stored) {
