@@ -12,9 +12,19 @@ const app = express();
 // ----------------------
 // 1️⃣ Middleware
 // ----------------------
+const cors = require('cors');
+
+// Allow frontend to communicate with backend
 app.use(cors({
-  origin: ['https://department-assignment-system.vercel.app'], // ✅ replace with your Vercel frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],       // handle preflight requests
+  origin: 'https://your-frontend-vercel-url.vercel.app', // exact Vercel URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // include OPTIONS
+  credentials: true
+}));
+
+// Explicitly handle preflight OPTIONS requests
+app.options('*', cors({
+  origin: 'https://your-frontend-vercel-url.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
 app.use(express.json());
