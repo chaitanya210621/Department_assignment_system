@@ -1,68 +1,46 @@
-// backend/server.js
 const dotenv = require('dotenv'); 
 dotenv.config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+const cors = require('cors'); // ✅ ONLY ONCE
 const path = require('path');
 
 const app = express();
 
 // ----------------------
-// 1️⃣ Middleware
+// Middleware
 // ----------------------
-
-// Allow frontend to communicate with backend
-const cors = require('cors');
-
 app.use(cors({
-  origin: 'https://department-assignment-system-h4bgr1rud.vercel.app', // Your Vercel frontend URL
+  origin: 'https://department-assignment-system-h4bgr1rud.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
 
-// Preflight requests (OPTIONS)
 app.options('*', cors({
   origin: 'https://department-assignment-system-h4bgr1rud.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
-// Middleware to parse JSON
-app.use(express.json());
 
-// Static folder for uploads
+app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ----------------------
-// 2️⃣ Routes
-// ----------------------
+// Routes
 app.use('/api', require('./routes/auth'));
 app.use('/api/teacher', require('./routes/teacher'));
 app.use('/api/student', require('./routes/student'));
 
-// Health check
 app.get('/', (req, res) => {
-  res.json({ message: 'Department Assignment System API is running' });
+  res.json({ message: 'API running' });
 });
 
-// ----------------------
-// 3️⃣ MongoDB Connection
-// ----------------------
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+// MongoDB
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
-  console.log('✅ MongoDB connected successfully');
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-  });
+  console.log('✅ MongoDB connected');
+  app.listen(process.env.PORT || 5000, () =>
+    console.log('🚀 Server running')
+  );
 })
-.catch(err => {
-  console.error('❌ MongoDB connection error:', err.message);
-  process.exit(1);
-});
-
-module.exports = app;
+.catch(err => console.log(err));
