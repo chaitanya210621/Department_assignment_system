@@ -14,12 +14,20 @@ const app = express();
 // ----------------------
 
 // Allow frontend to communicate with backend
+const cors = require('cors');
+
 app.use(cors({
-  origin: 'https://department-assignment-system-h4bgr1rud.vercel.app', // Your actual Vercel frontend URL
+  origin: 'https://department-assignment-system-h4bgr1rud.vercel.app', // Your Vercel frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
 
+// Preflight requests (OPTIONS)
+app.options('*', cors({
+  origin: 'https://department-assignment-system-h4bgr1rud.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
 // Middleware to parse JSON
 app.use(express.json());
 
