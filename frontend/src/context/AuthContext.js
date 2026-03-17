@@ -7,9 +7,11 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Use Render backend URL directly
-  axios.defaults.baseURL =
-    process.env.REACT_APP_API_URL || 'https://department-assignment-system.onrender.com';
+  // ✅ Set Axios base URL directly to Render backend
+  axios.defaults.baseURL = 'https://department-assignment-system.onrender.com';
+
+  // Optional: Add headers for credentials if needed
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
     const stored = localStorage.getItem('user');
