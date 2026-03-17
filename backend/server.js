@@ -12,7 +12,9 @@ const app = express();
 // ✅ Middleware (FINAL FIX)
 // ----------------------
 app.use(cors({
-  origin: true, // ✅ allow all (fixes Vercel URL changes)
+  origin: function (origin, callback) {
+    callback(null, true); // ✅ allow ALL origins (fixes your issue)
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
@@ -37,10 +39,7 @@ app.get('/', (req, res) => {
 // ----------------------
 // ✅ MongoDB Connection
 // ----------------------
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
   console.log('✅ MongoDB connected successfully');
 
