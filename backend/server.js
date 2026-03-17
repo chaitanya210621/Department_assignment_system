@@ -1,6 +1,5 @@
-// server.js
 const dotenv = require('dotenv'); 
-dotenv.config();                  // load .env variables
+dotenv.config(); // load .env variables
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -12,22 +11,18 @@ const app = express();
 // ----------------------
 // 1️⃣ Middleware
 // ----------------------
-const cors = require('cors');
 
 // Allow frontend to communicate with backend
 app.use(cors({
-  origin: 'https://your-frontend-vercel-url.vercel.app', // exact Vercel URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // include OPTIONS
-  credentials: true
-}));
-
-// Explicitly handle preflight OPTIONS requests
-app.options('*', cors({
-  origin: 'https://your-frontend-vercel-url.vercel.app',
+  origin: 'https://your-actual-vercel-frontend-url.vercel.app', // replace with your real frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
+
+// Middleware to parse JSON
 app.use(express.json());
+
+// Static folder for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ----------------------
