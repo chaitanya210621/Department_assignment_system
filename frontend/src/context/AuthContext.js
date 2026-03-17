@@ -1,5 +1,6 @@
+// frontend/src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../utils/api'; // Import the axios instance
 
 const AuthContext = createContext(null);
 
@@ -7,18 +8,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Set Axios base URL directly to Render backend
-  axios.defaults.baseURL = 'https://department-assignment-system.onrender.com';
-
-  // Optional: Add headers for credentials if needed
-  axios.defaults.withCredentials = true;
-
   useEffect(() => {
     const stored = localStorage.getItem('user');
     if (stored) {
       const parsed = JSON.parse(stored);
       setUser(parsed);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${parsed.token}`;
+      API.defaults.headers.common['Authorization'] = `Bearer ${parsed.token}`;
     }
     setLoading(false);
   }, []);
@@ -26,13 +21,13 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
-    axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+    API.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    delete axios.defaults.headers.common['Authorization'];
+    delete API.defaults.headers.common['Authorization'];
   };
 
   return (
